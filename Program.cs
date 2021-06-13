@@ -27,9 +27,9 @@ namespace builder
                 Setting up NodeJs 
             */
             Console.WriteLine("Downloading NodeJs");
-            WebClient webClient = new();
             if (!Directory.Exists(BUILDER_TOOLS))
             {
+                WebClient webClient = new();
                 webClient.DownloadFile(NODE_JS_URL, $".\\{BUILDER_TOOLS}.zip");
                 Console.WriteLine("Downloaded NodeJs");
 
@@ -48,16 +48,14 @@ namespace builder
             }
             Console.WriteLine("Extracted NodeJs");
 
-
-
             /*
                 Setting up App template
             */
             Console.WriteLine("Downloading App template");
-            using WebClient client = new();
-            client.Headers.Add("user-agent", "Anything");
             if (!Directory.Exists(APP_TEMPLATE))
             {
+                using WebClient client = new();
+                client.Headers.Add("user-agent", "Anything");
                 client.DownloadFile(APP_TEMPLATE_GIT, $".\\{APP_TEMPLATE}.zip");
                 Console.WriteLine("Downloaded App template");
 
@@ -76,12 +74,8 @@ namespace builder
             }
             Console.WriteLine("Extracted App template");
 
-
-
-
-
             /*
-                 Move the project files to the app template and overwrite if they allready exist
+                Move the project files to the app template and overwrite if they allready exist
             */
             Console.WriteLine("Setup App template");
             if (!Directory.Exists($".\\{APP_TEMPLATE}\\{APP}\\src\\img"))
@@ -93,11 +87,7 @@ namespace builder
                 File.Delete($".\\{APP_TEMPLATE}\\{APP}\\src\\projectData.json");
 
             File.Copy(".\\projectData.json", $".\\{APP_TEMPLATE}\\{APP}\\src\\projectData.json");
-            Console.WriteLine("Setup don App template");
-
-
-
-
+            Console.WriteLine("Setup done App template");
 
             /*
                 Setup the package.json of the app
@@ -115,11 +105,6 @@ namespace builder
             File.WriteAllText(path, package.ToString());
             Console.WriteLine("Configure done App template");
 
-
-
-
-
-
             /*
                 The building step
             */
@@ -131,12 +116,8 @@ namespace builder
             CommandExecuter.ExecuteCommand($"cd .\\{APP_TEMPLATE}\\{APP}\\ && .\\..\\..\\{BUILDER_TOOLS}\\{NODE_JS}\\npm.cmd run make");
             Console.WriteLine("Build App template");
 
-
-
-
-
             /*
-                Move the build to the root to the user
+                Move the build to the root of the project
             */
             DirectoryInfo buildOutputPath = new($".\\{APP_TEMPLATE}\\{APP}\\out\\make\\squirrel.windows\\x64\\");
             if (File.Exists($"./{PROJECT_NAME}.exe"))
@@ -163,6 +144,5 @@ namespace builder
             else
                 package.Add(key, value.ToString());
         }
-
     }
 }
